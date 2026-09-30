@@ -1,0 +1,2321 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>IntelliChef — Kya Pakana Hai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f6f7f3;
+        --surface: #fff;
+        --surface2: #f0f3ec;
+        --text: #17231d;
+        --muted: #728078;
+        --line: #e1e7df;
+        --primary: #2f7d4b;
+        --primary-dark: #215f38;
+        --lime: #b9d96b;
+        --orange: #e9954a;
+        --purple: #8171bd;
+        --blue: #5f9db8;
+        --shadow: 0 12px 35px rgba(27, 53, 38, 0.08);
+        --radius: 20px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: "DM Sans", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      .app-shell {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sidebar {
+        width: 255px;
+        background: #fff;
+        border-right: 1px solid var(--line);
+        padding: 25px 18px;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 20;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 0 9px 30px;
+      }
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        letter-spacing: -1px;
+      }
+      .brand strong {
+        display: block;
+        font-size: 16px;
+      }
+      .brand span {
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 0.5px;
+      }
+      .nav {
+        display: grid;
+        gap: 6px;
+      }
+      .nav-item {
+        border: 0;
+        background: transparent;
+        text-align: left;
+        color: #637168;
+        padding: 12px 13px;
+        border-radius: 12px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        transition: 0.2s;
+      }
+      .nav-item span {
+        width: 20px;
+        text-align: center;
+        font-size: 18px;
+      }
+      .nav-item:hover {
+        background: var(--surface2);
+        color: var(--primary);
+      }
+      .nav-item.active {
+        background: #eaf4e9;
+        color: var(--primary);
+      }
+      .sidebar-card {
+        margin-top: auto;
+        background: #edf6e9;
+        border-radius: 17px;
+        padding: 16px;
+      }
+      .mini-icon {
+        display: block;
+        background: #fff;
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        margin-bottom: 12px;
+      }
+      .sidebar-card strong {
+        font-size: 13px;
+      }
+      .sidebar-card p {
+        font-size: 11px;
+        line-height: 1.5;
+        color: var(--muted);
+        margin: 6px 0 12px;
+      }
+      .small-btn {
+        border: 0;
+        background: var(--primary);
+        color: #fff;
+        border-radius: 9px;
+        padding: 8px 10px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .sidebar-footer {
+        font-size: 9px;
+        color: #a0aaa3;
+        text-align: center;
+        margin-top: 17px;
+      }
+      .main {
+        margin-left: 255px;
+        width: calc(100% - 255px);
+      }
+      .topbar {
+        height: 70px;
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 38px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .breadcrumb {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .breadcrumb strong {
+        color: var(--text);
+      }
+      .top-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .icon-btn,
+      .menu-btn {
+        border: 1px solid var(--line);
+        background: #fff;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+      }
+      .menu-btn {
+        display: none;
+      }
+      .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #dcead8;
+        color: var(--primary);
+        font-size: 11px;
+        font-weight: 800;
+      }
+      .content {
+        padding: 32px 38px 55px;
+        max-width: 1450px;
+        margin: auto;
+      }
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: block;
+      }
+      .hero {
+        min-height: 310px;
+        border-radius: 27px;
+        background: linear-gradient(110deg, #193c28, #326d43);
+        color: #fff;
+        padding: 44px 50px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+      }
+      .hero:after {
+        content: "";
+        position: absolute;
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        right: -140px;
+        top: -170px;
+        background: rgba(185, 217, 107, 0.13);
+      }
+      .eyebrow {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        color: #83a08d;
+      }
+      .hero .eyebrow {
+        color: #c5dbab;
+      }
+      .hero h1 {
+        font:
+          700 46px/1.05 "Playfair Display",
+          serif;
+        margin: 8px 0 10px;
+        letter-spacing: -1px;
+      }
+      .hero h1 em {
+        color: #c9e07c;
+        font-style: normal;
+      }
+      .hero p {
+        margin: 0;
+        color: #d7e6dc;
+        font-size: 15px;
+      }
+      .hero-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 26px;
+      }
+      .primary-btn,
+      .secondary-btn {
+        border: 0;
+        border-radius: 11px;
+        padding: 12px 17px;
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .primary-btn {
+        background: var(--primary);
+        color: #fff;
+        box-shadow: 0 6px 15px rgba(47, 125, 75, 0.18);
+      }
+      .hero .primary-btn {
+        background: #d0e77d;
+        color: #1e4228;
+      }
+      .secondary-btn {
+        background: #fff;
+        border: 1px solid var(--line);
+        color: var(--text);
+      }
+      .hero .secondary-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.25);
+        color: #fff;
+      }
+      .compact {
+        padding: 8px 11px;
+        font-size: 10px;
+      }
+      .text-btn {
+        border: 0;
+        background: transparent;
+        color: var(--primary);
+        font-size: 11px;
+        font-weight: 800;
+      }
+      .hero-art {
+        margin-left: auto;
+        width: 280px;
+        height: 230px;
+        position: relative;
+      }
+      .plate {
+        position: absolute;
+        width: 190px;
+        height: 190px;
+        border-radius: 50%;
+        background: #fff;
+        right: 25px;
+        top: 24px;
+        box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+        border: 12px solid #e9efe5;
+      }
+      .plate:before {
+        content: "";
+        position: absolute;
+        inset: 22px;
+        border-radius: 50%;
+        background: #dcebd0;
+      }
+      .food {
+        position: absolute;
+        border-radius: 50%;
+        z-index: 2;
+      }
+      .food-a {
+        width: 82px;
+        height: 55px;
+        background: #d87938;
+        left: 39px;
+        top: 52px;
+        transform: rotate(-16deg);
+      }
+      .food-b {
+        width: 55px;
+        height: 45px;
+        background: #8db65a;
+        left: 80px;
+        top: 91px;
+      }
+      .food-c {
+        width: 48px;
+        height: 34px;
+        background: #e6b553;
+        left: 50px;
+        top: 111px;
+        transform: rotate(18deg);
+      }
+      .steam {
+        position: absolute;
+        width: 18px;
+        height: 60px;
+        border: 3px solid rgba(255, 255, 255, 0.45);
+        border-bottom: 0;
+        border-left-color: transparent;
+        border-radius: 50%;
+        top: 0;
+      }
+      .s1 {
+        right: 135px;
+      }
+      .s2 {
+        right: 96px;
+        top: 15px;
+      }
+      .s3 {
+        right: 65px;
+        top: 4px;
+      }
+      .section-head,
+      .page-intro {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        margin: 34px 0 16px;
+      }
+      .section-head h2,
+      .page-intro h1 {
+        margin: 4px 0 0;
+        font:
+          700 25px "Playfair Display",
+          serif;
+      }
+      .page-intro {
+        align-items: center;
+      }
+      .page-intro p {
+        margin: 5px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .page-intro h1 {
+        font-size: 32px;
+      }
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+      .stat-card,
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: 0 5px 20px rgba(25, 45, 32, 0.025);
+      }
+      .stat-card {
+        padding: 18px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 12px;
+        align-items: center;
+      }
+      .stat-icon {
+        width: 39px;
+        height: 39px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+      }
+      .green {
+        background: #e4f2df;
+        color: var(--primary);
+      }
+      .orange {
+        background: #fff0df;
+        color: #d37b25;
+      }
+      .purple {
+        background: #eee9fb;
+        color: var(--purple);
+      }
+      .blue {
+        background: #e3f1f5;
+        color: var(--blue);
+      }
+      .stat-card strong {
+        display: block;
+        font-size: 19px;
+      }
+      .stat-card div span {
+        font-size: 10px;
+        color: var(--muted);
+      }
+      .stat-card small {
+        font-size: 9px;
+        color: var(--muted);
+      }
+      .stat-card small.good,
+      .green-text {
+        color: var(--primary);
+      }
+      .orange-text {
+        color: #d47a27;
+      }
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 15px;
+        margin-top: 15px;
+      }
+      .panel {
+        padding: 21px;
+      }
+      .panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+      }
+      .panel h3 {
+        margin: 0;
+        font-size: 14px;
+      }
+      .panel-head p {
+        margin: 4px 0 0;
+        font-size: 10px;
+        color: var(--muted);
+      }
+      .recipe-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 18px;
+      }
+      .mini-recipe {
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        overflow: hidden;
+      }
+      .recipe-cover {
+        height: 95px;
+        display: grid;
+        place-items: center;
+        font-size: 43px;
+        background: linear-gradient(135deg, #f1e1c5, #d9edcf);
+      }
+      .mini-recipe:nth-child(2) .recipe-cover {
+        background: linear-gradient(135deg, #f7dbb4, #f0efc9);
+      }
+      .mini-recipe:nth-child(3) .recipe-cover {
+        background: linear-gradient(135deg, #d9e6f0, #ece1cb);
+      }
+      .mini-recipe div:last-child {
+        padding: 9px;
+      }
+      .mini-recipe b {
+        font-size: 11px;
+        display: block;
+      }
+      .mini-recipe small {
+        font-size: 9px;
+        color: var(--muted);
+      }
+      .badge {
+        font-size: 9px;
+        padding: 6px 9px;
+        border-radius: 20px;
+      }
+      .green-badge {
+        background: #e7f4e4;
+        color: var(--primary);
+      }
+      .budget-meter {
+        margin-top: 25px;
+      }
+      .meter-label,
+      .meter-foot {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+      }
+      .meter-label strong {
+        font-size: 22px;
+      }
+      .meter {
+        height: 10px;
+        border-radius: 20px;
+        background: #e8eee6;
+        margin: 12px 0 7px;
+        overflow: hidden;
+      }
+      .meter i {
+        height: 100%;
+        display: block;
+        background: var(--primary);
+        border-radius: 20px;
+      }
+      .meter-foot {
+        color: var(--muted);
+      }
+      .tip {
+        display: flex;
+        gap: 9px;
+        background: #f7f5e8;
+        border-radius: 12px;
+        padding: 11px;
+        margin-top: 19px;
+      }
+      .tip p {
+        margin: 0;
+        font-size: 10px;
+        line-height: 1.45;
+        color: #68705e;
+      }
+      .wide-panel {
+        margin-top: 15px;
+      }
+      .chip-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .chip {
+        padding: 9px 12px;
+        background: #f3f6f0;
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        font-size: 10px;
+        color: #536159;
+      }
+      .chip.low {
+        background: #fff3e7;
+        color: #ba6d27;
+        border-color: #f2d3ae;
+      }
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .search {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 12px;
+        flex: 1;
+        max-width: 460px;
+      }
+      .search span {
+        font-size: 19px;
+        color: var(--muted);
+      }
+      .search input {
+        border: 0;
+        outline: 0;
+        padding: 11px 0;
+        width: 100%;
+        font-size: 11px;
+      }
+      .toolbar select,
+      .planner-controls select,
+      .planner-controls input,
+      .missing-form select {
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: #fff;
+        padding: 10px 12px;
+        font-size: 11px;
+        color: var(--text);
+        outline: 0;
+      }
+      .recipe-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+      .recipe-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        overflow: hidden;
+        transition: 0.2s;
+      }
+      .recipe-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow);
+      }
+      .recipe-img {
+        height: 150px;
+        display: grid;
+        place-items: center;
+        font-size: 65px;
+        background: linear-gradient(135deg, #e5efd9, #f5e4c8);
+      }
+      .recipe-card:nth-child(3n + 2) .recipe-img {
+        background: linear-gradient(135deg, #f8ddc1, #e5efcd);
+      }
+      .recipe-card:nth-child(3n) .recipe-img {
+        background: linear-gradient(135deg, #dae7f1, #f1dfc8);
+      }
+      .recipe-body {
+        padding: 15px;
+      }
+      .tag {
+        font-size: 8px;
+        color: var(--primary);
+        font-weight: 800;
+        background: #edf6e9;
+        border-radius: 20px;
+        padding: 5px 8px;
+      }
+      .recipe-body h3 {
+        font-size: 15px;
+        margin: 9px 0 5px;
+      }
+      .recipe-body p {
+        font-size: 10px;
+        color: var(--muted);
+        line-height: 1.5;
+        margin: 0 0 13px;
+      }
+      .recipe-meta {
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 9px;
+      }
+      .recipe-meta b {
+        color: var(--text);
+      }
+      .pantry-summary {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        padding: 0;
+        margin-bottom: 15px;
+      }
+      .pantry-summary div {
+        padding: 20px;
+        border-right: 1px solid var(--line);
+      }
+      .pantry-summary div:last-child {
+        border: 0;
+      }
+      .pantry-summary span {
+        display: block;
+        color: var(--muted);
+        font-size: 10px;
+      }
+      .pantry-summary strong {
+        font-size: 21px;
+        display: block;
+        margin-top: 4px;
+      }
+      .small-search {
+        max-width: 220px;
+      }
+      .inventory {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 9px;
+        margin-top: 17px;
+      }
+      .inventory-item {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+      }
+      .inventory-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 10px;
+        background: #f1f5ed;
+        display: grid;
+        place-items: center;
+        font-size: 17px;
+      }
+      .inventory-item strong {
+        display: block;
+        font-size: 11px;
+      }
+      .inventory-item small {
+        color: var(--muted);
+        font-size: 9px;
+      }
+      .status {
+        margin-left: auto;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--primary);
+      }
+      .status.low {
+        background: var(--orange);
+      }
+      .planner-controls {
+        background: #edf5e9;
+        border-radius: 16px;
+        padding: 14px;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+      .planner-controls label {
+        font-size: 10px;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .week-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+      }
+      .day-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        overflow: hidden;
+        min-height: 250px;
+      }
+      .day-head {
+        padding: 11px;
+        background: #f3f6f0;
+        font-size: 10px;
+        font-weight: 800;
+        text-align: center;
+      }
+      .day-card.today .day-head {
+        background: var(--primary);
+        color: #fff;
+      }
+      .meal {
+        padding: 10px;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
+      .meal:last-child {
+        border-bottom: 0;
+      }
+      .meal small {
+        font-size: 8px;
+        color: var(--muted);
+        display: block;
+      }
+      .meal strong {
+        font-size: 10px;
+        display: block;
+        margin-top: 3px;
+      }
+      .meal .emoji {
+        font-size: 23px;
+        margin-bottom: 3px;
+      }
+      .price-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 13px;
+        margin-bottom: 15px;
+      }
+      .price-highlight {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 19px;
+      }
+      .price-highlight span {
+        font-size: 9px;
+        color: var(--muted);
+        display: block;
+      }
+      .price-highlight strong {
+        font-size: 24px;
+        display: block;
+        margin: 7px 0;
+      }
+      .price-highlight small {
+        font-size: 9px;
+        color: var(--primary);
+      }
+      .price-highlight small.bad {
+        color: #cf722c;
+      }
+      .price-table {
+        margin-top: 15px;
+      }
+      .price-line {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 1fr;
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+        padding: 12px 5px;
+        font-size: 10px;
+      }
+      .price-line.head {
+        font-size: 8px;
+        color: var(--muted);
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+      .up {
+        color: #ce7331;
+      }
+      .down {
+        color: var(--primary);
+      }
+      .missing-cost {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 20px;
+        margin-top: 15px;
+        align-items: center;
+      }
+      .missing-form {
+        display: flex;
+        gap: 8px;
+        margin-top: 14px;
+      }
+      .cost-result {
+        background: #f0f6e9;
+        border-radius: 15px;
+        padding: 18px 25px;
+        min-width: 180px;
+      }
+      .cost-result span,
+      .cost-result small {
+        font-size: 9px;
+        color: var(--muted);
+        display: block;
+      }
+      .cost-result strong {
+        font-size: 25px;
+        display: block;
+        margin: 3px 0;
+      }
+      .budget-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+      .big-budget {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+      }
+      .big-budget h2 {
+        font:
+          700 31px "Playfair Display",
+          serif;
+        margin: 5px 0;
+      }
+      .big-budget p {
+        font-size: 10px;
+        color: var(--muted);
+      }
+      .ring {
+        width: 125px;
+        height: 125px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: conic-gradient(var(--primary) 0 84.5%, #e8eee5 84.5%);
+        position: relative;
+        flex: none;
+      }
+      .ring:after {
+        content: "";
+        position: absolute;
+        width: 91px;
+        height: 91px;
+        border-radius: 50%;
+        background: #fff;
+      }
+      .ring span,
+      .ring small {
+        position: absolute;
+        z-index: 1;
+      }
+      .ring span {
+        font-weight: 800;
+        font-size: 19px;
+        margin-top: -3px;
+      }
+      .ring small {
+        font-size: 8px;
+        color: var(--muted);
+        margin-top: 30px;
+      }
+      .clean-list {
+        padding: 0;
+        margin: 15px 0 0;
+        list-style: none;
+      }
+      .clean-list li {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 10px;
+      }
+      .clean-list li b {
+        margin-left: auto;
+        color: var(--primary);
+        font-size: 9px;
+      }
+      .bar-chart {
+        height: 240px;
+        display: flex;
+        align-items: end;
+        justify-content: space-around;
+        gap: 15px;
+        padding: 15px 5px 0;
+      }
+      .bar-chart div {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: end;
+        gap: 7px;
+      }
+      .bar-chart i {
+        display: block;
+        width: 42px;
+        background: linear-gradient(#a9cb73, #4f8c57);
+        border-radius: 8px 8px 3px 3px;
+      }
+      .bar-chart span,
+      .bar-chart b {
+        font-size: 9px;
+      }
+      .bar-chart b {
+        color: var(--muted);
+      }
+      .kit-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .kit-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 19px;
+        overflow: hidden;
+      }
+      .kit-img {
+        height: 180px;
+        display: grid;
+        place-items: center;
+        font-size: 78px;
+      }
+      .kit1 {
+        background: #f4e0c6;
+      }
+      .kit2 {
+        background: #dfeacf;
+      }
+      .kit3 {
+        background: #e4e8ef;
+      }
+      .kit-card > div:last-child {
+        padding: 17px;
+      }
+      .kit-card h3 {
+        margin: 10px 0 5px;
+        font-size: 17px;
+      }
+      .kit-card p {
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.5;
+      }
+      .kit-card footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 16px;
+      }
+      .kit-card footer strong {
+        font-size: 17px;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 20, 14, 0.45);
+        z-index: 50;
+        place-items: center;
+        padding: 20px;
+      }
+      .modal.show {
+        display: grid;
+      }
+      .modal-box {
+        background: #fff;
+        border-radius: 22px;
+        width: min(520px, 100%);
+        padding: 27px;
+        position: relative;
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.2);
+      }
+      .modal-close {
+        position: absolute;
+        right: 15px;
+        top: 12px;
+        border: 0;
+        background: transparent;
+        font-size: 25px;
+        color: var(--muted);
+      }
+      .modal-box h2 {
+        font:
+          700 27px "Playfair Display",
+          serif;
+        margin: 0 0 8px;
+      }
+      .modal-box p {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .modal-list {
+        padding-left: 18px;
+        font-size: 11px;
+        line-height: 2;
+      }
+      .toast {
+        position: fixed;
+        right: 25px;
+        bottom: 25px;
+        background: #193c28;
+        color: #fff;
+        padding: 12px 16px;
+        border-radius: 11px;
+        font-size: 11px;
+        opacity: 0;
+        transform: translateY(15px);
+        transition: 0.25s;
+        z-index: 60;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: none;
+      }
+      body.dark {
+        --bg: #111713;
+        --surface: #18201b;
+        --surface2: #202a23;
+        --text: #edf4ed;
+        --muted: #9aa89e;
+        --line: #2b382f;
+      }
+      .dark .sidebar,
+      .dark .topbar {
+        background: #151c17;
+      }
+      .dark .secondary-btn,
+      .dark .search,
+      .dark .toolbar select,
+      .dark .planner-controls select,
+      .dark .planner-controls input,
+      .dark .missing-form select,
+      .dark .icon-btn {
+        background: var(--surface);
+        color: var(--text);
+      }
+      .dark .hero {
+        background: linear-gradient(110deg, #10291a, #245437);
+      }
+      .dark .day-card,
+      .dark .recipe-card,
+      .dark .kit-card,
+      .dark .stat-card {
+        background: var(--surface);
+      }
+      .dark .day-head {
+        background: #202a23;
+      }
+      .dark .ring:after {
+        background: var(--surface);
+      }
+      @media (max-width: 1050px) {
+        .stat-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .recipe-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .week-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        .inventory {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .kit-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .hero-art {
+          opacity: 0.5;
+        }
+        .dashboard-grid,
+        .budget-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 760px) {
+        .sidebar {
+          transform: translateX(-100%);
+          transition: 0.25s;
+        }
+        .sidebar.open {
+          transform: none;
+          box-shadow: 10px 0 40px rgba(0, 0, 0, 0.15);
+        }
+        .main {
+          margin-left: 0;
+          width: 100%;
+        }
+        .menu-btn {
+          display: block;
+        }
+        .topbar {
+          padding: 0 17px;
+        }
+        .content {
+          padding: 22px 17px;
+        }
+        .breadcrumb {
+          margin-right: auto;
+          margin-left: 10px;
+        }
+        .hero {
+          padding: 32px 25px;
+          min-height: 360px;
+        }
+        .hero h1 {
+          font-size: 38px;
+        }
+        .hero-art {
+          position: absolute;
+          right: -70px;
+          bottom: -20px;
+          opacity: 0.28;
+        }
+        .stat-grid,
+        .recipe-grid,
+        .price-cards,
+        .kit-grid,
+        .inventory {
+          grid-template-columns: 1fr;
+        }
+        .recipe-row {
+          grid-template-columns: 1fr;
+        }
+        .page-intro {
+          align-items: flex-start;
+          gap: 15px;
+          flex-direction: column;
+        }
+        .page-intro h1 {
+          font-size: 28px;
+        }
+        .toolbar,
+        .planner-controls {
+          flex-wrap: wrap;
+        }
+        .week-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .pantry-summary {
+          grid-template-columns: 1fr 1fr;
+        }
+        .pantry-summary div:nth-child(2) {
+          border-right: 0;
+        }
+        .missing-cost {
+          grid-template-columns: 1fr;
+        }
+        .bar-chart {
+          gap: 5px;
+        }
+        .bar-chart i {
+          width: 30px;
+        }
+      }
+
+      :root {
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      body {
+        font-family: "DM Sans", system-ui, sans-serif;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 18px;
+        margin-bottom: 14px;
+        box-shadow: 0 5px 20px rgba(25, 45, 32, 0.025);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 14px;
+      }
+      .grid .card {
+        margin: 0;
+      }
+      #app > h2 {
+        font:
+          700 32px "Playfair Display",
+          Georgia,
+          serif;
+        margin: 0 0 4px;
+      }
+      #app > h2 + p.mut {
+        margin: 0 0 20px;
+      }
+      h3 {
+        margin: 0 0 6px;
+        font-size: 15px;
+      }
+      .mut {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin: 10px 0;
+      }
+      button.b,
+      button.g {
+        border-radius: 11px;
+        padding: 9px 14px;
+        font-size: 12px;
+        font-weight: 800;
+        border: 0;
+      }
+      button.b {
+        background: var(--primary);
+        color: #fff;
+        box-shadow: 0 6px 15px rgba(47, 125, 75, 0.18);
+      }
+      button.g {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        color: var(--text);
+      }
+      input,
+      select,
+      textarea {
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: var(--surface);
+        color: var(--text);
+        padding: 9px 12px;
+        font-size: 12px;
+        outline: 0;
+        max-width: 100%;
+      }
+      textarea {
+        width: 100%;
+        margin: 6px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td,
+      th {
+        padding: 10px 5px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        font-size: 12px;
+      }
+      th {
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .tw {
+        overflow-x: auto;
+      }
+      .tag {
+        font-size: 10px;
+        margin-right: 4px;
+        display: inline-block;
+        margin-bottom: 3px;
+      }
+      .tag.bad {
+        background: #fff0df;
+        color: #c2661a;
+      }
+      .tag.ok {
+        background: #e4f2df;
+        color: var(--primary);
+      }
+      .up {
+        color: #ce7331;
+      }
+      .dn {
+        color: var(--primary);
+      }
+      .chip {
+        cursor: pointer;
+        font-size: 12px;
+        margin: 3px;
+      }
+      .chip.on {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+      .bar {
+        height: 10px;
+        border-radius: 20px;
+        background: #e8eee6;
+        overflow: hidden;
+        margin: 10px 0;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        border-radius: 20px;
+      }
+      details {
+        margin: 8px 0;
+      }
+      summary {
+        cursor: pointer;
+        color: var(--primary);
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .recipe-body p {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .recipe-body h3 {
+        font-size: 16px;
+      }
+      .recipe-body .row {
+        margin: 8px 0;
+      }
+      .kit-card h3 {
+        font-size: 17px;
+      }
+      .kit-card > div:last-child {
+        padding: 17px;
+      }
+      .mini-recipe small {
+        display: block;
+      }
+      #cartp {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: min(400px, 100%);
+        background: var(--surface);
+        border-left: 1px solid var(--line);
+        z-index: 40;
+        padding: calc(20px + env(safe-area-inset-top, 0px)) 20px 20px;
+        overflow: auto;
+        transform: translateX(105%);
+        transition: 0.25s;
+        box-shadow: -10px 0 40px rgba(0, 0, 0, 0.12);
+      }
+      #cartp.open {
+        transform: none;
+      }
+      .dark .card,
+      .dark .chip,
+      .dark button.g {
+        background: var(--surface);
+      }
+      .dark .bar,
+      .dark .meter {
+        background: #2b382f;
+      }
+      .dark .tag,
+      .dark .badge {
+        background: #243428;
+      }
+      .dark .stat-card small,
+      .dark .mini-recipe {
+        color: var(--text);
+      }
+      .brand.logo {
+        padding: 0 0 20px;
+        justify-content: center;
+      }
+      .brand.logo img {
+        width: 100%;
+        max-width: 200px;
+        border-radius: 14px;
+        background: #fff;
+        display: block;
+      }
+      .page-intro {
+        margin-top: 0;
+      }
+      .page-intro h1 {
+        margin: 4px 0 0;
+      }
+      .chip.f {
+        font-size: 12px;
+        padding: 9px 14px;
+      }
+      @media (max-width: 760px) {
+        .recipe-grid,
+        .kit-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+              <aside class="sidebar" id="sidebar">
+        <div class="brand">
+          <img src="./logo.png" alt="IntelliChef — Kya pakana hai" class="brand-mark">
+          <div>
+            <strong>IntelliChef</strong>
+            <span>Kya Pakana Hai?</span>
+          </div>
+        </div>
+        <nav class="nav" id="nav"></nav>
+      </aside>
+      <main class="main">
+        <header class="topbar">
+          <button
+            class="menu-btn"
+            onclick="$('sidebar').classList.toggle('open')"
+          >
+            ☰
+          </button>
+          <div class="breadcrumb">
+            <span>IntelliChef</span><b>/</b
+            ><strong id="pageTitle">Dashboard</strong>
+          </div>
+          <div class="top-actions">
+            <button class="secondary-btn compact" onclick="cartT()">
+              🛒 Cart (<span id="cc">0</span>)</button
+            ><button class="icon-btn" title="Toggle theme" onclick="theme()">
+              ☼
+            </button>
+            <img src="logo.png" alt="IntelliChef — Kya pakana hai" class="avatar">
+          </div>
+        </header>
+        <div class="content" id="app"></div>
+      </main>
+    </div>
+    <aside id="cartp"></aside>
+    <div id="toast" class="toast"></div>
+    <script>
+      const $ = (id) => document.getElementById(id),
+        rs = (n) => "Rs " + Math.round(n).toLocaleString();
+      // name:[price per unit, unit, category]
+      const P0 = {
+        chicken: [650, "kg", "Meat"],
+        beef: [1100, "kg", "Meat"],
+        eggs: [32, "pc", "Dairy & Eggs"],
+        milk: [220, "L", "Dairy & Eggs"],
+        yogurt: [260, "kg", "Dairy & Eggs"],
+        rice: [320, "kg", "Grains"],
+        flour: [140, "kg", "Grains"],
+        lentils: [300, "kg", "Pulses"],
+        chickpeas: [320, "kg", "Pulses"],
+        onion: [120, "kg", "Veg"],
+        tomato: [150, "kg", "Veg"],
+        potato: [100, "kg", "Veg"],
+        cauliflower: [130, "kg", "Veg"],
+        spinach: [100, "kg", "Veg"],
+        okra: [200, "kg", "Veg"],
+        garlic: [500, "kg", "Veg"],
+        oil: [500, "L", "Pantry"],
+        sugar: [130, "kg", "Pantry"],
+        masala: [60, "pack", "Pantry"],
+      };
+      const R0 = [
+        {
+          n: "Chicken Biryani",
+          t: "meat",
+          s: 4,
+          i: {
+            chicken: 0.5,
+            rice: 0.4,
+            onion: 0.3,
+            tomato: 0.2,
+            yogurt: 0.15,
+            oil: 0.1,
+            masala: 1,
+          },
+          st: "Fry onions golden. Marinate chicken in yogurt, masala, tomato; cook till tender. Par-boil rice, layer over chicken, dum for 20 min.",
+        },
+        {
+          n: "Chicken Karahi",
+          t: "meat",
+          s: 4,
+          i: { chicken: 0.6, tomato: 0.5, oil: 0.1, garlic: 0.03, masala: 1 },
+          st: "Sear chicken in hot oil with garlic. Add tomatoes and masala, cook uncovered till oil separates. Serve with roti.",
+        },
+        {
+          n: "Beef Pulao",
+          t: "meat",
+          s: 4,
+          i: {
+            beef: 0.5,
+            rice: 0.4,
+            onion: 0.3,
+            oil: 0.08,
+            garlic: 0.02,
+            masala: 1,
+          },
+          st: "Pressure-cook beef with onion, garlic, masala for stock. Add soaked rice and stock 1:1.5, cook till fluffy.",
+        },
+        {
+          n: "Daal Chawal",
+          t: "legume",
+          s: 4,
+          i: {
+            lentils: 0.25,
+            rice: 0.3,
+            onion: 0.1,
+            tomato: 0.1,
+            oil: 0.04,
+            masala: 1,
+          },
+          st: "Boil lentils till soft. Make tarka of onion, tomato, masala in oil and pour over. Serve with steamed rice.",
+        },
+        {
+          n: "Chana Masala",
+          t: "legume",
+          s: 4,
+          i: { chickpeas: 0.3, onion: 0.2, tomato: 0.25, oil: 0.05, masala: 1 },
+          st: "Soak and boil chickpeas. Cook onion-tomato masala, add chickpeas and simmer 15 min.",
+        },
+        {
+          n: "Khichdi",
+          t: "legume",
+          s: 4,
+          i: { rice: 0.25, lentils: 0.2, oil: 0.04, yogurt: 0.2, masala: 1 },
+          st: "Cook rice and lentils together with masala till mushy. Finish with ghee/oil, serve with yogurt.",
+        },
+        {
+          n: "Aloo Gobi",
+          t: "veg",
+          s: 4,
+          i: {
+            potato: 0.3,
+            cauliflower: 0.4,
+            onion: 0.2,
+            tomato: 0.2,
+            oil: 0.05,
+            masala: 1,
+          },
+          st: "Saute onion, add tomato and masala, then potato and cauliflower. Cover and cook on low till soft.",
+        },
+        {
+          n: "Aloo Palak",
+          t: "veg",
+          s: 4,
+          i: { potato: 0.3, spinach: 0.5, onion: 0.15, oil: 0.04, masala: 1 },
+          st: "Fry onion and masala, add diced potato, then chopped spinach. Cook till potato is tender.",
+        },
+        {
+          n: "Bhindi Masala",
+          t: "veg",
+          s: 4,
+          i: { okra: 0.5, onion: 0.2, tomato: 0.1, oil: 0.05, masala: 1 },
+          st: "Fry okra separately till not sticky. Cook onion-tomato masala, fold in okra for 5 min.",
+        },
+        {
+          n: "Egg Paratha",
+          t: "egg",
+          s: 4,
+          i: { flour: 0.3, eggs: 4, oil: 0.05, onion: 0.1 },
+          st: "Knead dough, roll out. Cook on tawa, spread beaten egg and onion, fold and fry crisp.",
+        },
+        {
+          n: "Anda Bhurji",
+          t: "egg",
+          s: 4,
+          i: { eggs: 6, onion: 0.15, tomato: 0.15, oil: 0.03, masala: 1 },
+          st: "Saute onion and tomato, add masala, scramble in eggs on low heat.",
+        },
+        {
+          n: "Rice Kheer",
+          t: "sweet",
+          s: 4,
+          i: { milk: 1, rice: 0.1, sugar: 0.15 },
+          st: "Simmer rice in milk on low heat, stirring, till thick. Add sugar and chill.",
+        },
+      ];
+      const KITS = [
+        {
+          n: "Biryani Night",
+          e: "🍗",
+          d: "Everything for a festive chicken biryani.",
+          r: ["Chicken Biryani"],
+        },
+        {
+          n: "Comfort Kit",
+          e: "🍲",
+          d: "Daal chawal + kheer to finish.",
+          r: ["Daal Chawal", "Rice Kheer"],
+        },
+        {
+          n: "Breakfast Combo",
+          e: "🍳",
+          d: "Egg paratha and anda bhurji.",
+          r: ["Egg Paratha", "Anda Bhurji"],
+        },
+        {
+          n: "Veggie Week",
+          e: "🥦",
+          d: "Aloo gobi, bhindi and aloo palak.",
+          r: ["Aloo Gobi", "Bhindi Masala", "Aloo Palak"],
+        },
+      ];
+      const LO = {
+        rice: [
+          "Egg fried rice: stir-fry with egg, onion, spices",
+          "Rice kheer: simmer with milk and sugar",
+          "Rice cutlets: mash with potato, shape, shallow-fry",
+        ],
+        chicken: [
+          "Chicken sandwich/wrap with yogurt sauce",
+          "Shred into fried rice or pulao",
+          "Chicken paratha roll",
+        ],
+        potato: [
+          "Aloo paratha or aloo tikki",
+          "Potato bhujia with cumin",
+          "Aloo cutlets",
+        ],
+        lentils: [
+          "Daal paratha: knead into dough",
+          "Daal soup with lemon",
+          "Khichdi with extra rice",
+        ],
+        chickpeas: [
+          "Chana chaat with onion, tomato, lemon",
+          "Chana patties",
+          "Chickpea wrap",
+        ],
+        eggs: [
+          "Egg curry with onion-tomato masala",
+          "Egg fried rice",
+          "Egg sandwich",
+        ],
+        roti: [
+          "Roti chips (bake with masala)",
+          "Roti upma: shred and saute with onion",
+          "Sweet roti with milk & sugar",
+        ],
+        tomato: ["Tomato chutney", "Tomato-daal tarka", "Tomato rice"],
+        yogurt: ["Raita", "Lassi", "Marinade for chicken"],
+        milk: ["Kheer", "Milk tea/chai", "Custard"],
+      };
+      let S = load();
+      function load() {
+        try {
+          const x = JSON.parse(localStorage.getItem("ic1"));
+          if (x) return x;
+        } catch (e) {}
+        return {
+          pr: JSON.parse(JSON.stringify(P0)),
+          pantry: { rice: 0.5, onion: 0.5, oil: 0.3, masala: 2, eggs: 6 },
+          cart: {},
+          cap: 40000,
+          exp: [],
+          custom: [],
+          plan: [],
+          prev: {},
+        };
+      }
+      function save() {
+        try {
+          localStorage.setItem("ic1", JSON.stringify(S));
+        } catch (e) {}
+      }
+      const R = () => R0.concat(S.custom),
+        U = (i) => S.pr[i][1],
+        cap = (s) => s[0].toUpperCase() + s.slice(1);
+      const qf = (n, u) =>
+        u == "kg" && n < 1
+          ? Math.round(n * 1000) + " g"
+          : u == "L" && n < 1
+            ? Math.round(n * 1000) + " ml"
+            : +n.toFixed(2) + " " + u;
+      function toast(m) {
+        const t = $("toast");
+        t.textContent = m;
+        t.classList.add("show");
+        clearTimeout(toast.t);
+        toast.t = setTimeout(() => t.classList.remove("show"), 2600);
+      }
+      function calc(r, sv) {
+        const k = sv / r.s;
+        let tot = 0,
+          miss = 0,
+          rows = [];
+        for (const [i, q] of Object.entries(r.i)) {
+          const need = q * k,
+            have = S.pantry[i] || 0,
+            m = Math.max(0, need - have);
+          tot += need * S.pr[i][0];
+          miss += m * S.pr[i][0];
+          rows.push({ i, need, have, m });
+        }
+        return { tot, miss, rows };
+      }
+      const month = () => new Date().toISOString().slice(0, 7),
+        spent = () =>
+          S.exp
+            .filter((e) => e.d.slice(0, 7) == month())
+            .reduce((a, e) => a + e.a, 0),
+        cartTot = () =>
+          Object.entries(S.cart).reduce((a, [i, q]) => a + q * S.pr[i][0], 0);
+      function addC(i, q) {
+        S.cart[i] = +((S.cart[i] || 0) + q).toFixed(3);
+        save();
+        upd();
+        const o = spent() + cartTot() - S.cap;
+        toast(
+          o > 0
+            ? `⚠️ Cart pushes you ${rs(o)} over your monthly cap!`
+            : `Added ${cap(i)} to cart`,
+        );
+      }
+      function addMiss(rows) {
+        let n = 0;
+        rows.forEach((r) => {
+          if (r.m > 0.0001) {
+            S.cart[r.i] = +((S.cart[r.i] || 0) + r.m).toFixed(3);
+            n++;
+          }
+        });
+        save();
+        upd();
+        toast(
+          n
+            ? `${n} missing items added to cart`
+            : "You already have everything!",
+        );
+      }
+      // nav
+      const TABS = [
+        ["dashboard", "Dashboard", "⌂"],
+        ["ideas", "Cook Ideas", "✧"],
+        ["recipes", "Recipes & Cost", "▤"],
+        ["pantry", "My Pantry", "▦"],
+        ["left", "Leftovers", "♻"],
+        ["plan", "Weekly Planner", "◫"],
+        ["prices", "Market Prices", "⌁"],
+        ["budget", "Budget Guard", "₨"],
+        ["kits", "Recipe Kits", "✦"],
+      ];
+      let tab = "dashboard";
+      function nav() {
+        $("nav").innerHTML = TABS.map(
+          (t) =>
+            `<button class="nav-item ${t[0] == tab ? "active" : ""}" onclick="go('${t[0]}')"><span>${t[2]}</span>${t[1]}</button>`,
+        ).join("");
+        $("pageTitle").textContent = TABS.find((t) => t[0] == tab)[1];
+      }
+      function go(t) {
+        tab = t;
+        nav();
+        V[t]();
+        $("sidebar").classList.remove("open");
+        window.scrollTo(0, 0);
+      }
+      function upd() {
+        $("cc").textContent = Object.keys(S.cart).length;
+        if ($("cartp").classList.contains("open")) cartR();
+      }
+      const app = (h) => ($("app").innerHTML = h);
+      const V = {};
+      // 1 prices
+      let pq = "";
+      V.prices = () => {
+        const cats = {};
+        Object.keys(S.pr)
+          .filter((i) => i.includes(pq.toLowerCase()))
+          .forEach((i) => (cats[S.pr[i][2]] = cats[S.pr[i][2]] || []).push(i));
+        app(
+          `<h2>Market Prices</h2><p class="mut">Live grocery rates (edit to match your local mandi). Arrows show change since your last edit.</p><div class="row"><input placeholder="Search…" value="${pq}" oninput="pq=this.value;V.prices();document.querySelector('input').focus()"><button class="g" onclick="sim()">🔄 Simulate market update</button></div>` +
+            Object.entries(cats)
+              .map(
+                ([c, l]) =>
+                  `<div class="card tw"><h3>${c}</h3><table>` +
+                  l
+                    .map((i) => {
+                      const p = S.prev[i],
+                        d = p ? ((S.pr[i][0] - p) / p) * 100 : 0;
+                      return `<tr><td>${cap(i)}</td><td><input type="number" style="width:90px" value="${S.pr[i][0]}" onchange="setP('${i}',this.value)"> /${U(i)}</td><td class="${d > 0 ? "up" : "dn"}">${d ? (d > 0 ? "▲ " : "▼ ") + Math.abs(d).toFixed(1) + "%" : "–"}</td><td><button class="g" onclick="addC('${i}',1)">+ Cart</button></td></tr>`;
+                    })
+                    .join("") +
+                  `</table></div>`,
+              )
+              .join(""),
+        );
+      };
+      function setP(i, v) {
+        v = +v;
+        if (v > 0) {
+          S.prev[i] = S.pr[i][0];
+          S.pr[i][0] = v;
+          save();
+          V.prices();
+          upd();
+        }
+      }
+      function sim() {
+        Object.keys(S.pr).forEach((i) => {
+          S.prev[i] = S.pr[i][0];
+          S.pr[i][0] = Math.max(
+            5,
+            Math.round(S.pr[i][0] * (0.92 + Math.random() * 0.16)),
+          );
+        });
+        save();
+        V.prices();
+        toast("Prices refreshed");
+      }
+      // 3 pantry
+      V.pantry = () => {
+        const ks = Object.keys(S.pantry).filter((k) => S.pantry[k] > 0);
+        app(`<h2>My Pantry</h2><p class="mut">Track groceries at home. Recipes and the planner use this to work out what you still need to buy.</p>
+<div class="card row"><select id="pi">${Object.keys(S.pr)
+          .map((i) => `<option value="${i}">${cap(i)} (${U(i)})</option>`)
+          .join(
+            "",
+          )}</select><input id="pq" type="number" step="any" placeholder="Qty" style="width:90px"><button class="b" onclick="pAdd()">Add stock</button></div>
+<div class="card tw"><table>${ks.length ? ks.map((k) => `<tr><td>${cap(k)}</td><td><input type="number" step="any" style="width:90px" value="${S.pantry[k]}" onchange="S.pantry['${k}']=+this.value;save()"> ${U(k)}</td><td>${rs(S.pantry[k] * S.pr[k][0])}</td><td><button class="g" onclick="delete S.pantry['${k}'];save();V.pantry()">✕</button></td></tr>`).join("") + `<tr><th>Total value</th><th></th><th>${rs(ks.reduce((a, k) => a + S.pantry[k] * S.pr[k][0], 0))}</th><th></th></tr>` : '<tr><td class="mut">Pantry is empty.</td></tr>'}</table></div>`);
+      };
+      function pAdd() {
+        const i = $("pi").value,
+          q = +$("pq").value;
+        if (q > 0) {
+          S.pantry[i] = +((S.pantry[i] || 0) + q).toFixed(3);
+          save();
+          V.pantry();
+        }
+      }
+      // 2+4 recipes
+      let rq = "",
+        cook = false,
+        sv = {};
+      V.recipes = () => {
+        const rs_ = R()
+          .map((r, x) => [r, x])
+          .filter(
+            ([r]) =>
+              r.n.toLowerCase().includes(rq.toLowerCase()) &&
+              (!cook || calc(r, r.s).miss == 0),
+          );
+        app(
+          `<h2>Digital Recipe Book</h2><p class="mut">Each recipe shows what it costs and what you're missing at home.</p><div class="row"><input placeholder="Search recipes" value="${rq}" oninput="rq=this.value;V.recipes();const e=document.querySelector('input');e.focus();e.setSelectionRange(99,99)"><label><input type="checkbox" ${cook ? "checked" : ""} onchange="cook=this.checked;V.recipes()"> Cookable now</label></div>
+<div class="recipe-grid">` +
+            rs_
+              .map(([r, x]) => {
+                const s = sv[x] || r.s,
+                  c = calc(r, s),
+                  ms = c.rows.filter((z) => z.m > 0.0001);
+                return `<div class="recipe-card"><div class="recipe-img">${em(r)}</div><div class="recipe-body"><h3>${r.n}</h3><span class="tag">${r.t}</span><span class="tag">⏱ ${tm(r)} min</span>
+<div class="row">Servings <input type="number" min="1" style="width:60px" value="${s}" onchange="sv[${x}]=Math.max(1,+this.value);V.recipes()"></div>
+<div>Full cost: <b>${rs(c.tot)}</b> (${rs(c.tot / s)}/person)</div><div>To buy: <b class="${c.miss ? "up" : "dn"}">${rs(c.miss)}</b></div>
+<div>${ms.length ? ms.map((z) => `<span class="tag bad">${cap(z.i)} ${qf(z.m, U(z.i))}</span>`).join("") : '<span class="tag ok">✓ All ingredients at home</span>'}</div>
+<details><summary class="mut">Ingredients & method</summary><table>${c.rows.map((z) => `<tr><td>${cap(z.i)}</td><td>${qf(z.need, U(z.i))}</td><td class="mut">have ${qf(z.have, U(z.i))}</td></tr>`).join("")}</table><p>${r.st}</p></details>
+<div class="row"><button class="b" onclick="addMiss(calc(R()[${x}],${s}).rows)">🛒 Add missing</button><button class="g" onclick="cooked(${x},${s})">🍽️ Cooked it</button>${x >= R0.length ? `<button class="g" onclick="S.custom.splice(${x - R0.length},1);save();V.recipes()">Delete</button>` : ""}</div></div></div>`;
+              })
+              .join("") +
+            `</div>
+<div class="card" style="margin-top:12px"><h3>➕ Add your own recipe</h3><input id="rn" placeholder="Recipe name" style="width:100%"><div class="row"><select id="rt"><option>meat</option><option>legume</option><option>veg</option><option>egg</option><option>sweet</option></select> serves <input id="rsv" type="number" value="4" style="width:60px"> ⏱ <input id="rtm" type="number" value="30" style="width:60px"> min</div>
+<textarea id="ri" rows="4" placeholder="One ingredient per line: name quantity (kg / L / pc / pack)\nchicken 0.5\nonion 0.2"></textarea><textarea id="rst" rows="2" placeholder="Method"></textarea><button class="b" onclick="addR()">Save recipe</button><p class="mut">Ingredients must exist in Market Prices: ${Object.keys(S.pr).join(", ")}.</p></div>`,
+        );
+      };
+      function addR() {
+        const n = $("rn").value.trim(),
+          ing = {};
+        $("ri")
+          .value.split("\n")
+          .forEach((l) => {
+            const m = l
+              .trim()
+              .toLowerCase()
+              .match(/^(.+?)\s+([\d.]+)$/);
+            if (m && S.pr[m[1]]) ing[m[1]] = +m[2];
+          });
+        if (!n || !Object.keys(ing).length)
+          return toast("Need a name and at least one valid ingredient line");
+        S.custom.push({
+          n,
+          t: $("rt").value,
+          s: +$("rsv").value || 4,
+          i: ing,
+          st: $("rst").value || "—",
+          tm: +$("rtm").value || 30,
+        });
+        save();
+        V.recipes();
+        toast("Recipe saved");
+      }
+      function cooked(x, s) {
+        const c = calc(R()[x], s);
+        c.rows.forEach(
+          (z) =>
+            (S.pantry[z.i] = Math.max(
+              0,
+              +((S.pantry[z.i] || 0) - z.need).toFixed(3),
+            )),
+        );
+        save();
+        V.recipes();
+        toast("Pantry updated 👨‍🍳");
+      }
+      // 5 leftovers
+      let lo = [];
+      V.left = () => {
+        app(
+          `<h2>Leftover Optimizer</h2><p class="mut">Pick what's left over — get ideas plus recipes that use it up.</p><div class="card">${Object.keys(
+            LO,
+          )
+            .map(
+              (k) =>
+                `<button class="chip ${lo.includes(k) ? "on" : ""}" onclick="lo=lo.includes('${k}')?lo.filter(x=>x!='${k}'):lo.concat('${k}');V.left()">${cap(k)}</button>`,
+            )
+            .join("")}</div>` +
+            (lo.length
+              ? lo
+                  .map(
+                    (k) =>
+                      `<div class="card"><h3>${cap(k)}</h3><ul>${LO[k].map((x) => `<li>${x}</li>`).join("")}</ul></div>`,
+                  )
+                  .join("") +
+                `<div class="card"><h3>Recipes that use them</h3>` +
+                (R()
+                  .map((r) => [r, lo.filter((k) => k in r.i).length])
+                  .filter((a) => a[1])
+                  .sort((a, b) => b[1] - a[1])
+                  .map(
+                    ([r, n]) =>
+                      `<div>• <b>${r.n}</b> <span class="mut">uses ${n} of your leftovers · to buy ${rs(calc(r, r.s).miss)}</span></div>`,
+                  )
+                  .join("") ||
+                  '<span class="mut">No matching recipes yet.</span>') +
+                "</div>"
+              : ""),
+        );
+      };
+      // 6 planner
+      const PAT = ["meat", "legume", "veg", "egg", "veg", "legume", "meat"],
+        DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      function gen() {
+        const all = R(),
+          used = new Set();
+        let p = [];
+        PAT.forEach((t) => {
+          let c = all
+            .map((r, x) => x)
+            .filter((x) => all[x].t == t && !used.has(x));
+          if (!c.length)
+            c = all
+              .map((r, x) => x)
+              .filter((x) => !used.has(x) && all[x].t != "sweet");
+          const x = c.sort(
+            (a, b) =>
+              calc(all[a], 4).miss -
+              calc(all[b], 4).miss +
+              (Math.random() - 0.5) * 400,
+          )[0];
+          used.add(x);
+          p.push(x);
+        });
+        S.plan = p;
+        save();
+        V.plan();
+      }
+      V.plan = () => {
+        if (!S.plan.length) return gen();
+        const all = R(),
+          tot = {};
+        let cost = 0,
+          miss = 0;
+        S.plan.forEach((x) => {
+          const r = all[x],
+            c = calc(r, r.s);
+          cost += c.tot;
+          c.rows.forEach((z) => (tot[z.i] = (tot[z.i] || 0) + z.need));
+        });
+        const rows = Object.entries(tot).map(([i, n]) => ({
+          i,
+          need: n,
+          m: Math.max(0, n - (S.pantry[i] || 0)),
+        }));
+        rows.forEach((z) => (miss += z.m * S.pr[z.i][0]));
+        const cnt = {};
+        S.plan.forEach((x) => (cnt[all[x].t] = (cnt[all[x].t] || 0) + 1));
+        app(`<h2>Smart Weekly Meal Planner</h2><p class="mut">A balanced week: meat max twice, plus legumes, vegetables and eggs — biased to what you already have.</p><div class="row"><button class="b" onclick="gen()">🎲 Regenerate</button><button class="g" onclick="addMiss(${JSON.stringify(rows).replace(/"/g, "&quot;")})">🛒 Add week's missing items to cart</button></div>
+<div class="card"><b>Week cost:</b> ${rs(cost)} · <b>To buy:</b> ${rs(miss)} · <span class="mut">Weekly share of cap: ${rs(S.cap / 4.3)}</span><div>${Object.entries(
+          cnt,
+        )
+          .map(([k, v]) => `<span class="tag">${k} ×${v}</span>`)
+          .join("")}</div></div>
+<div class="grid">${S.plan.map((x, d) => `<div class="card"><span class="mut">${DAYS[d]}</span><h3>${all[x].n}</h3><span class="tag">${all[x].t}</span> <span class="mut">${rs(calc(all[x], all[x].s).miss)} to buy</span><div class="row"><select onchange="S.plan[${d}]=+this.value;save();V.plan()">${all.map((r, y) => `<option value="${y}" ${y == x ? "selected" : ""}>${r.n}</option>`).join("")}</select></div></div>`).join("")}</div>`);
+      };
+      // 7 budget
+      V.budget = () => {
+        const sp = spent(),
+          pc = Math.min(100, (sp / S.cap) * 100),
+          col = pc < 70 ? "var(--ok)" : pc < 90 ? "#f59f00" : "var(--bad)",
+          ex = S.exp.filter((e) => e.d.slice(0, 7) == month()).reverse();
+        app(`<h2>Household Budget & Monthly Food Cap Guard</h2><div class="card"><div class="row">Monthly food cap: Rs <input type="number" value="${S.cap}" style="width:110px" onchange="S.cap=Math.max(1,+this.value);save();V.budget()"></div>
+<div class="bar"><i style="width:${pc}%;background:${col}"></i></div><p><b>${rs(sp)}</b> spent of ${rs(S.cap)} · <b style="color:${col}">${sp > S.cap ? "Over cap by " + rs(sp - S.cap) : rs(S.cap - sp) + " left"}</b></p><p class="mut">The guard warns whenever your cart would push you past the cap. Daily allowance for the rest of the month: ${rs(Math.max(0, S.cap - sp) / Math.max(1, new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() - new Date().getDate() + 1))}</p></div>
+<div class="card row"><input id="el" placeholder="Expense label"><input id="ea" type="number" placeholder="Amount" style="width:110px"><button class="b" onclick="const a=+$('ea').value;if(a>0){S.exp.push({d:new Date().toISOString(),l:$('el').value||'Groceries',a});save();V.budget()}">Log expense</button></div>
+${pieCard(sp)}<div class="card tw"><h3>This month</h3><table>${ex.map((e) => `<tr><td>${e.d.slice(0, 10)}</td><td>${e.l}</td><td>${rs(e.a)}</td></tr>`).join("") || '<tr><td class="mut">Nothing logged yet.</td></tr>'}</table></div>`);
+      };
+      // 8 kits
+      V.kits = () => {
+        app(
+          `<h2>Recipe Kits</h2><p class="mut">Ready-made ingredient bundles for 4 people — add the whole kit or only what you're missing.</p><div class="kit-grid">` +
+            KITS.map((k, x) => {
+              const rows = kitRows(k),
+                full = rows.reduce((a, z) => a + z.need * S.pr[z.i][0], 0),
+                m = rows.reduce((a, z) => a + z.m * S.pr[z.i][0], 0);
+              return `<div class="kit-card"><div class="kit-img kit${(x % 3) + 1}">${k.e}</div><div><h3>${k.n}</h3><p class="mut">${k.d}<br>${k.r.join(" + ")}</p><div>Kit price: <b>${rs(full)}</b> · Missing: <b>${rs(m)}</b></div><div class="row"><button class="b" onclick="kitAdd(${x},1)">Add full kit</button><button class="g" onclick="kitAdd(${x},0)">Only missing</button></div></div></div>`;
+            }).join("") +
+            "</div>",
+        );
+      };
+      function kitRows(k) {
+        const t = {};
+        k.r.forEach((n) => {
+          const r = R().find((r) => r.n == n);
+          for (const i in r.i) t[i] = (t[i] || 0) + r.i[i];
+        });
+        return Object.entries(t).map(([i, n]) => ({
+          i,
+          need: n,
+          m: Math.max(0, n - (S.pantry[i] || 0)),
+        }));
+      }
+      function kitAdd(x, full) {
+        const rows = kitRows(KITS[x]);
+        if (full) rows.forEach((z) => (z.m = z.need));
+        addMiss(rows);
+      }
+      // cart
+      function cartT() {
+        $("cartp").classList.toggle("open");
+        cartR();
+      }
+      function cartR() {
+        const it = Object.entries(S.cart),
+          t = cartTot(),
+          o = spent() + t - S.cap;
+        $("cartp").innerHTML =
+          `<div class="row"><h2 style="flex:1">🛒 Your Cart</h2><button class="g" onclick="cartT()">✕</button></div>` +
+          (it.length
+            ? `<table>${it.map(([i, q]) => `<tr><td>${cap(i)}<div class="mut">${rs(S.pr[i][0])}/${U(i)}</div></td><td><input type="number" step="any" style="width:70px" value="${q}" onchange="S.cart['${i}']=+this.value;if(!(+this.value>0))delete S.cart['${i}'];save();upd();cartR()"> ${U(i)}</td><td>${rs(q * S.pr[i][0])}</td><td><button class="g" onclick="delete S.cart['${i}'];save();upd();cartR()">✕</button></td></tr>`).join("")}</table><h3 style="margin-top:12px">Total: ${rs(t)}</h3>${o > 0 ? `<p class="up">⚠️ This puts you ${rs(o)} over your monthly cap.</p>` : `<p class="dn">Within your monthly cap (${rs(S.cap - spent() - t)} left after this).</p>`}<div class="row"><button class="b" onclick="checkout()">Place order (demo)</button><button class="g" onclick="S.cart={};save();upd();cartR()">Clear</button></div><p class="mut">No payment needed — placing an order adds items to your pantry and logs the spend to your budget.</p>`
+            : '<p class="mut">Your cart is empty. Add items from recipes, prices, the planner or kits.</p>');
+      }
+      function checkout() {
+        const t = cartTot();
+        for (const [i, q] of Object.entries(S.cart))
+          S.pantry[i] = +((S.pantry[i] || 0) + q).toFixed(3);
+        S.exp.push({ d: new Date().toISOString(), l: "Cart order", a: t });
+        S.cart = {};
+        save();
+        upd();
+        cartR();
+        go(tab);
+        toast("Order placed! Pantry & budget updated ✅");
+      }
+
+      const EM = {
+          meat: "🍗",
+          legume: "🍲",
+          veg: "🥦",
+          egg: "🍳",
+          sweet: "🍮",
+        },
+        EN = {
+          "Chicken Biryani": "🍛",
+          "Beef Pulao": "🍚",
+          "Chana Masala": "🫘",
+          Khichdi: "🥣",
+          "Egg Paratha": "🫓",
+        },
+        em = (r) => EN[r.n] || EM[r.t] || "🍽️";
+      const low = (k) =>
+        S.pantry[k] < (["pc", "pack"].includes(U(k)) ? 2 : 0.2);
+      V.dashboard = () => {
+        const picks = R()
+            .map((r) => [r, calc(r, r.s)])
+            .sort((a, b) => a[1].miss - b[1].miss)
+            .slice(0, 3),
+          sp = spent(),
+          pc = Math.min(100, (sp / S.cap) * 100),
+          pk = Object.keys(S.pantry).filter((k) => S.pantry[k] > 0),
+          ks = Object.keys(S.prev),
+          pch = ks.length
+            ? ks.reduce(
+                (a, i) => a + ((S.pr[i][0] - S.prev[i]) / S.prev[i]) * 100,
+                0,
+              ) / ks.length
+            : 0,
+          nl = pk.filter(low).length;
+        app(`<section><div class="hero"><div><span class="eyebrow">SMART EVERYDAY COOKING</span><h1>Kya <em>Pakana</em> Hai?</h1><p>A Smart Solution for Everyday Meal Planning</p><div class="hero-actions"><button class="primary-btn" onclick="go('ideas')">✦ What should I cook?</button><button class="secondary-btn" onclick="go('recipes')">Explore recipes</button></div></div><div class="hero-art"><div class="plate"><div class="food food-a"></div><div class="food food-b"></div><div class="food food-c"></div></div><div class="steam s1"></div><div class="steam s2"></div><div class="steam s3"></div></div></div>
+<div class="section-head"><div><span class="eyebrow">AT A GLANCE</span><h2>Your kitchen today</h2></div><button class="text-btn" onclick="go('pantry')">Manage pantry →</button></div>
+<div class="stat-grid"><div class="stat-card"><span class="stat-icon green">▦</span><div><strong>${pk.length}</strong><span>Pantry items</span></div><small>${nl} running low</small></div>
+<div class="stat-card"><span class="stat-icon orange">₨</span><div><strong>${rs(sp)}</strong><span>Monthly food spend</span></div><small class="good">${rs(Math.max(0, S.cap - sp))} left</small></div>
+<div class="stat-card"><span class="stat-icon purple">◫</span><div><strong>${S.plan.length} / 7</strong><span>Meals planned</span></div><small>${7 - S.plan.length} to plan</small></div>
+<div class="stat-card"><span class="stat-icon blue">⌁</span><div><strong>${pch > 0 ? "+" : ""}${pch.toFixed(1)}%</strong><span>Price change</span></div><small>since last edit</small></div></div>
+<div class="dashboard-grid"><div class="panel"><div class="panel-head"><div><h3>Smart picks for tonight</h3><p>Cheapest to cook based on your pantry</p></div><button class="text-btn" onclick="go('recipes')">View all</button></div><div class="recipe-row">${picks.map(([r, c]) => `<div class="mini-recipe" style="cursor:pointer" onclick="go('recipes')"><div class="recipe-cover">${em(r)}</div><div><b>${r.n}</b><small>${c.miss ? rs(c.miss) + " to buy" : "Ready to cook ✓"}</small></div></div>`).join("")}</div></div>
+<div class="panel"><div class="panel-head"><div><h3>Monthly food cap</h3><p>Your spending guard</p></div><span class="badge green-badge">${sp > S.cap ? "Over cap" : pc > 85 ? "Careful" : "On track"}</span></div><div class="budget-meter"><div class="meter-label"><strong>${rs(sp)}</strong><span>of ${rs(S.cap)}</span></div><div class="meter"><i style="width:${pc}%"></i></div><div class="meter-foot"><span>${rs(Math.max(0, S.cap - sp))} remaining</span><span>${pc.toFixed(1)}%</span></div></div><div class="tip"><span>💡</span><p><b>Smart tip:</b> ${nl ? "Restock " + pk.filter(low).map(cap).slice(0, 3).join(", ") + " soon." : "Cook pantry-based meals to keep spending down."}</p></div></div></div>
+<div class="panel wide-panel"><div class="panel-head"><div><h3>What's in your kitchen?</h3><p>Quick look at your pantry inventory</p></div><button class="secondary-btn compact" onclick="go('pantry')">+ Add item</button></div><div class="chip-list">${pk.map((k) => `<span class="chip ${low(k) ? "low" : ""}">${cap(k)} · ${qf(S.pantry[k], U(k))}</span>`).join("") || '<span class="mut">Pantry is empty.</span>'}</div></div></section>`);
+      };
+      function theme() {
+        document.body.classList.toggle("dark");
+        try {
+          localStorage.setItem(
+            "ict",
+            document.body.classList.contains("dark") ? 1 : 0,
+          );
+        } catch (e) {}
+      }
+      try {
+        const t = localStorage.getItem("ict");
+        if (
+          t === "1" ||
+          (t === null && matchMedia("(prefers-color-scheme:dark)").matches)
+        )
+          document.body.classList.add("dark");
+      } catch (e) {}
+
+      const TM = {
+          "Chicken Biryani": 75,
+          "Chicken Karahi": 40,
+          "Beef Pulao": 70,
+          "Daal Chawal": 40,
+          "Chana Masala": 45,
+          Khichdi: 30,
+          "Aloo Gobi": 35,
+          "Aloo Palak": 30,
+          "Bhindi Masala": 30,
+          "Egg Paratha": 25,
+          "Anda Bhurji": 15,
+          "Rice Kheer": 50,
+        },
+        tm = (r) => r.tm || TM[r.n] || 30;
+      const PC = [
+        "#2f7d4b",
+        "#e9954a",
+        "#8171bd",
+        "#5f9db8",
+        "#b9d96b",
+        "#d9480f",
+      ];
+      function pieCard(sp) {
+        const m = {};
+        S.exp
+          .filter((e) => e.d.slice(0, 7) == month())
+          .forEach((e) => (m[e.l] = (m[e.l] || 0) + e.a));
+        const sl = Object.entries(m).map(([l, v], i) => ({
+            l,
+            v,
+            c: PC[i % PC.length],
+          })),
+          rem = Math.max(0, S.cap - sp);
+        if (rem > 0) sl.push({ l: "Remaining", v: rem, c: "var(--line)" });
+        const T = sl.reduce((a, s) => a + s.v, 0);
+        let a0 = -Math.PI / 2,
+          p = "";
+        sl.forEach((s) => {
+          const f = s.v / T;
+          if (f >= 0.9999) {
+            p += `<circle cx="100" cy="100" r="90" style="fill:${s.c}"/>`;
+            return;
+          }
+          const a1 = a0 + f * 2 * Math.PI,
+            P = (a, r) =>
+              (100 + r * Math.cos(a)).toFixed(2) +
+              " " +
+              (100 + r * Math.sin(a)).toFixed(2);
+          p += `<path d="M100 100L${P(a0, 90)}A90 90 0 ${f > 0.5 ? 1 : 0} 1 ${P(a1, 90)}Z" style="fill:${s.c};stroke:var(--surface);stroke-width:2"/>`;
+          a0 = a1;
+        });
+        return `<div class="card"><h3>Where your cap is going</h3><div class="row" style="gap:28px"><svg viewBox="0 0 200 200" width="210" height="210">${p}</svg><div>${sl.map((s) => `<div style="margin:7px 0"><i style="display:inline-block;width:12px;height:12px;border-radius:4px;background:${s.c};margin-right:8px;vertical-align:-1px"></i>${s.l} — <b>${rs(s.v)}</b> (${Math.round((s.v / T) * 100)}%)</div>`).join("")}</div></div><p class="mut">${sp ? "Spent " + rs(sp) + " of " + rs(S.cap) + " (" + Math.round((sp / S.cap) * 100) + "%) this month." : "Nothing spent yet this month — the full cap is available."}</p></div>`;
+      }
+      let fl = { quick: 0, cheap: 0, pantry: 0 },
+        hl = -1;
+      function ideaList() {
+        let L = R().map((r, x) => {
+          const c = calc(r, r.s);
+          return {
+            r,
+            x,
+            c,
+            cv: c.rows.filter((z) => z.m <= 0.0001).length / c.rows.length,
+            pp: c.tot / r.s,
+          };
+        });
+        if (fl.quick) L = L.filter((o) => tm(o.r) <= 30);
+        if (fl.cheap) L = L.filter((o) => o.pp <= 100);
+        if (fl.pantry) L = L.filter((o) => o.cv >= 0.5);
+        return L.sort((a, b) => b.cv - a.cv || tm(a.r) - tm(b.r));
+      }
+      V.ideas = () => {
+        const L = ideaList(),
+          F = [
+            ["quick", "⚡ Quick (≤ 30 min)"],
+            ["cheap", "💸 Cheap (≤ Rs 100/person)"],
+            ["pantry", "🏠 From your pantry"],
+          ];
+        app(`<div class="page-intro"><div><span class="eyebrow">COOKING IDEAS</span><h1>What should I cook?</h1><p>Pick a filter and get ideas that fit your time, wallet and kitchen.</p></div><button class="primary-btn" onclick="surprise()">✦ Surprise me</button></div>
+<div class="card">${F.map(([k, t]) => `<button class="chip f ${fl[k] ? "on" : ""}" onclick="fl.${k}^=1;hl=-1;V.ideas()">${t}</button>`).join("")}<span class="mut"> ${L.length} idea${L.length == 1 ? "" : "s"}</span></div>
+<div class="recipe-grid">${L.map((o) => `<div class="recipe-card" id="i${o.x}" style="${o.x == hl ? "outline:3px solid var(--primary)" : ""}"><div class="recipe-img" style="height:110px;font-size:52px">${em(o.r)}</div><div class="recipe-body"><h3>${o.r.n}</h3><span class="tag">${o.r.t}</span><span class="tag">⏱ ${tm(o.r)} min</span><span class="tag">${rs(o.pp)}/person</span><span class="tag ${o.cv >= 0.5 ? "ok" : "bad"}">🏠 ${Math.round(o.cv * 100)}% in pantry</span><p>${o.c.miss ? "To buy: " + rs(o.c.miss) : "You have everything!"}</p><div class="row"><button class="b" onclick="addMiss(calc(R()[${o.x}],${o.r.s}).rows)">🛒 Add missing</button><button class="g" onclick="rq=R()[${o.x}].n;cook=false;go('recipes')">Recipe →</button></div></div></div>`).join("") || '<div class="card mut">No recipes match all filters. Try turning one off or stock your pantry.</div>'}</div>`);
+      };
+      function surprise() {
+        const L = ideaList();
+        if (!L.length) return toast("No ideas match these filters");
+        hl = L[Math.floor(Math.random() * L.length)].x;
+        V.ideas();
+        $("i" + hl).scrollIntoView({ behavior: "smooth", block: "center" });
+        toast("How about " + R()[hl].n + "? 😋");
+      }
+      nav();
+      V[tab]();
+      upd();
+    </script>
+  </body>
+</html>
